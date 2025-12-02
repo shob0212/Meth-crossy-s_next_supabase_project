@@ -1,36 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TripLink 要件定義書 (Ver 1.0)
 
-## Getting Started
+**プロジェクト**: TripLink 開発プロジェクト  
+**開発手法**: アジャイル（スクラム想定）  
+**ステータス**: ドラフト
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 1. プロダクト概要
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 1.1 アプリ名称
+**TripLink（トリップリンク）**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 1.2 背景・解決したい課題
+現代の旅行者は以下の課題を抱えている：
+*   航空券、宿泊、観光情報の管理がアプリやメールごとに散在している。
+*   スケジュール、経路、支出を一括管理できず、全体像が把握しづらい。
+*   家族や友人との旅行計画の共有・調整がLINEや口頭ベースで煩雑。
+*   旅行中の写真やメモが整理されず、後から振り返りにくい。
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1.3 プロダクトの目的（Mission）
+*   **一元化**: 旅行の計画（旅程・予約）から記録（写真・支出）までをワンストップで完結させる。
+*   **共有の効率化**: リンク一つで仲間と情報を同期し、調整コストをゼロにする。
+*   **思い出の資産化**: 手間をかけずに旅の記録を整理し、いつでも振り返れるようにする。
 
-## Learn More
+### 1.4 ターゲットユーザー
+*   **コアターゲット**: 友人グループ、カップル、家族など「複数人」で旅行をする層。
+*   **ペルソナ**:
+    *   「幹事役」… 予約や計画を率先して行うが、共有や集金の手間にストレスを感じている。
+    *   「同行者」… 計画はお任せだが、旅程や集合場所はスマホですぐ確認したい。
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 2. フェーズ定義（MVPの範囲）
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+アジャイル開発のため、リリースフェーズを定義する。
 
-## Deploy on Vercel
+*   **Phase 1 (MVP)**: 「グループで旅程を共有し、共同編集できる」状態。最低限の旅程管理と招待機能。
+*   **Phase 2**: 「お金の管理と詳細な予約管理」。支出管理（割り勘）、チケット詳細管理の強化。
+*   **Phase 3**: 「思い出とUX向上」。写真アルバム、地図連携、オフライン対応、リアクション機能など。
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 3. 機能要件 (Functional Requirements)
+
+### 3.1 認証・ユーザー管理 【優先度：最高】
+*   **ユーザー登録/ログイン**: メールアドレス/パスワード、またはGoogle認証（ソーシャルログイン）。
+*   **プロフィール管理**: ユーザー名、アイコン画像の設定（グループ内で誰か識別するため）。
+
+### 3.2 旅程管理機能（Timeline） 【優先度：高】
+旅のスケジュールを作成・管理するコア機能。
+*   **旅行プロジェクト作成**: タイトル、日程（開始日・終了日）、カバー画像の設定。
+*   **タイムライン表示**: 時系列でのイベント表示（日別タブ切り替え）。
+*   **イベント登録・編集**:
+    *   タイトル、開始/終了時刻、場所、メモ、URL、カテゴリ（移動/観光/食事/宿泊）。
+*   **イベント削除**: 誤って作成した予定の削除。
+
+### 3.3 グループ共有機能 【優先度：高】
+Phase 1から実装すべきTripLinkの核となる機能。
+*   **メンバー招待**: 招待リンク（URL）の発行と、リンク経由での参加処理。
+*   **共同編集**: メンバー全員が旅程を追加・編集できる権限設定。
+*   **閲覧モード**: ログインしていないユーザーでも「閲覧のみ」可能な共有URL（要検討）。
+
+### 3.4 チケット・予約情報管理 【優先度：中】
+Phase 1では旅程の「メモ/添付」で代用し、Phase 2で構造化する。
+*   **予約情報の登録**: 航空券、ホテル、アクティビティの予約番号やPDF/スクショ画像の保存。
+*   **クイックアクセス**: いざという時にQRコードや予約画面を即座に出せるビュー。
+*   **情報の紐付け**: タイムライン上のイベントと予約情報をリンクさせる。
+
+### 3.5 支出管理機能（Wallet） 【優先度：中】
+グループ旅行特有の「立替・割り勘」トラブルを解決する。
+*   **支出記録**: 「誰が」「何に」「いくら」払ったかを記録。通貨選択。
+*   **自動集計**: カテゴリ別、支払者別の合計表示。
+*   **割り勘計算（精算）**: 最終的に「誰が誰にいくら払えばいいか」を算出するレポート機能。
+
+### 3.6 思い出記録機能（Memories） 【優先度：低】
+*   **写真アップロード**: 旅行に紐付いた写真の保存。
+*   **マップ表示**: 訪れた場所を地図上でピン留め表示。
+*   **日記・コメント**: 旅程ごとの感想や、全体の日記機能。
+
+---
+
+## 4. 非機能要件 (Non-Functional Requirements)
+
+### 4.1 UI/UX
+*   **モバイルファースト**: 旅行中はスマホでの操作が9割以上を占めるため、スマホブラウザでの操作性を最優先する。
+*   **レスポンシブデザイン**: PC（計画時）とスマホ（旅行中）の両方で見やすいデザイン。
+
+### 4.2 技術・インフラ
+*   **Webアプリ**: ブラウザベースで動作（インストール不要）。
+*   **PWA対応（推奨）**: 将来的にホーム画面追加や、不安定なネットワーク下での動作を考慮しPWA化を目指す。
+*   **リアルタイム性**: グループ編集時、他者の変更がリロードなしで反映されることが望ましい（余裕があれば）。
+
+### 4.3 セキュリティ
+*   **データ保護**: 旅行情報はプライベートな情報が含まれるため、適切なアクセス制御を行う（招待されたメンバー以外は見れない）。
+*   **HTTPS通信**: 全通信の暗号化。
+
+---
+
+## 5. データモデル概要（ER図イメージ）
+
+アジャイル開発の初期設計用。
+
+*   **Users**: ユーザーID, 名前, アバター, メールなど
+*   **Trips**: 旅行ID, タイトル, 開始日, 終了日, 管理者ID
+*   **Trip_Members**: 旅行ID, ユーザーID, 権限（編集/閲覧）
+*   **Events (Itinerary)**: イベントID, 旅行ID, 時間, タイトル, 場所, メモ, カテゴリ
+*   **Expenses**: 支出ID, 旅行ID, 支払者ID, 金額, 通貨, 対象メンバー
+*   **Images**: 画像ID, 関連ID(Event/Trip), URL

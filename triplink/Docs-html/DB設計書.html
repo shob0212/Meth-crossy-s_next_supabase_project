@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>TripLink &#x30c7;&#x30fc;&#x30bf;&#x30d9;&#x30fc;&#x30b9;&#x8a2d;&#x8a08;&#x66f8; &lpar;Ver 1&period;0&rpar;</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="triplink-データベース設計書-ver-10">TripLink データベース設計書 (Ver 1.0)</h1>
+<p><strong>プロジェクト</strong>: TripLink<br>
+<strong>最終更新日</strong>: 202X年X月X日<br>
+<strong>記述形式</strong>: Mermaid (ER図)</p>
+<hr>
+<h2 id="1-全体-er図-entity-relationship-diagram">1. 全体 ER図 (Entity Relationship Diagram)</h2>
+<pre><code class="language-mermaid">erDiagram
+    %% ユーザー管理
+    USERS {
+        uuid id PK &quot;ユーザーID&quot;
+        string email &quot;メールアドレス&quot;
+        string display_name &quot;表示名&quot;
+        string avatar_url &quot;アイコン画像URL&quot;
+        timestamp created_at &quot;作成日時&quot;
+    }
+
+    %% 旅行プロジェクト（親テーブル）
+    TRIPS {
+        uuid id PK &quot;旅行ID&quot;
+        uuid created_by FK &quot;作成者ID&quot;
+        string title &quot;旅行タイトル&quot;
+        date start_date &quot;開始日&quot;
+        date end_date &quot;終了日&quot;
+        string cover_image_url &quot;カバー画像URL&quot;
+        string invite_code &quot;招待用コード/トークン&quot;
+        timestamp created_at &quot;作成日時&quot;
+    }
+
+    %% 旅行メンバー（中間テーブル）
+    TRIP_MEMBERS {
+        uuid trip_id FK &quot;旅行ID&quot;
+        uuid user_id FK &quot;ユーザーID&quot;
+        string role &quot;権限 (admin/editor/viewer)&quot;
+        string status &quot;状態 (joined/invited)&quot;
+        timestamp joined_at &quot;参加日時&quot;
+    }
+
+    %% 旅程・予定 (TimeLine)
+    ITINERARIES {
+        uuid id PK &quot;予定ID&quot;
+        uuid trip_id FK &quot;旅行ID&quot;
+        string title &quot;予定タイトル&quot;
+        timestamp start_time &quot;開始日時&quot;
+        timestamp end_time &quot;終了日時&quot;
+        string category &quot;種類 (move/stay/food/sightseeing/other)&quot;
+        string memo &quot;メモ・詳細&quot;
+        string location_name &quot;場所名称&quot;
+        float location_lat &quot;緯度 (Map用)&quot;
+        float location_lng &quot;経度 (Map用)&quot;
+        string url &quot;参考URL&quot;
+        string booking_ref &quot;予約番号 (チケット管理用)&quot;
+        string attachment_url &quot;添付ファイル (EチケットPDF等)&quot;
+    }
+
+    %% 支出記録 (Wallet)
+    EXPENSES {
+        uuid id PK &quot;支出ID&quot;
+        uuid trip_id FK &quot;旅行ID&quot;
+        uuid paid_by FK &quot;支払った人のID&quot;
+        string title &quot;用途 (タクシー代、夕食など)&quot;
+        decimal amount &quot;金額&quot;
+        string currency &quot;通貨 (JPY/USD/EUR...)&quot;
+        string category &quot;分類 (food/transport/ticket...)&quot;
+        timestamp paid_at &quot;支払い日時&quot;
+    }
+
+    %% 支出の割り勘対象 (Split Logic)
+    EXPENSE_SHARES {
+        uuid expense_id FK &quot;支出ID&quot;
+        uuid user_id FK &quot;負担する人のID&quot;
+        boolean is_settled &quot;精算済みフラグ&quot;
+        decimal split_amount &quot;負担額 (固定額の場合)&quot;
+    }
+
+    %% 写真・メディア (Memories)
+    MEDIA {
+        uuid id PK &quot;メディアID&quot;
+        uuid trip_id FK &quot;旅行ID&quot;
+        uuid uploader_id FK &quot;アップロード者ID&quot;
+        uuid itinerary_id FK &quot;関連する予定ID (Optional)&quot;
+        string file_url &quot;画像URL&quot;
+        string file_type &quot;種類 (image/video)&quot;
+        timestamp created_at &quot;撮影/アップロード日時&quot;
+    }
+
+    %% リレーション定義
+    USERS ||--o{ TRIPS : &quot;作成する&quot;
+    USERS ||--o{ TRIP_MEMBERS : &quot;参加する&quot;
+    TRIPS ||--o{ TRIP_MEMBERS : &quot;メンバーを持つ&quot;
+    
+    TRIPS ||--o{ ITINERARIES : &quot;予定を含む&quot;
+    TRIPS ||--o{ EXPENSES : &quot;支出を含む&quot;
+    TRIPS ||--o{ MEDIA : &quot;写真を含む&quot;
+
+    USERS ||--o{ EXPENSES : &quot;支払う&quot;
+    EXPENSES ||--o{ EXPENSE_SHARES : &quot;割り勘詳細&quot;
+    USERS ||--o{ EXPENSE_SHARES : &quot;負担する&quot;
+
+    ITINERARIES |o--o{ MEDIA : &quot;紐付く写真&quot;
+</code></pre>
+<h2 id="2-テーブル詳細定義">2. テーブル詳細定義</h2>
+<h3 id="21-users-ユーザー">2.1 USERS (ユーザー)</h3>
+<p>認証システム（Supabase Auth / Firebase Authなど）と連携する基本テーブル。</p>
+<ul>
+<li><strong>id</strong>: UUID。AuthプロバイダのIDと一致させると管理が楽。</li>
+<li><strong>display_name</strong>: グループ内で表示される名前。</li>
+</ul>
+<h3 id="22-trips-旅行">2.2 TRIPS (旅行)</h3>
+<p>アプリの核となるテーブル。</p>
+<ul>
+<li><strong>invite_code</strong>: ランダムな文字列を生成して格納。<code>example.com/join?code=xxxx</code> のように使用する。</li>
+<li><strong>cover_image_url</strong>: 旅行一覧で見栄えを良くするための画像。</li>
+</ul>
+<h3 id="23-trip_members-メンバー管理">2.3 TRIP_MEMBERS (メンバー管理)</h3>
+<p>多対多の中間テーブル。</p>
+<ul>
+<li><strong>role</strong>:
+<ul>
+<li><code>admin</code>: メンバー招待・削除、旅行自体の削除が可能。</li>
+<li><code>editor</code>: 旅程・支出の追加編集が可能（基本はこれ）。</li>
+<li><code>viewer</code>: 閲覧のみ（将来的な拡張用）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="24-itineraries-旅程チケット">2.4 ITINERARIES (旅程・チケット)</h3>
+<p>スケジュールとチケット管理を統合したテーブル。</p>
+<ul>
+<li><strong>category</strong>: アイコンの出し分けに使用。
+<ul>
+<li><code>move</code> (移動: 飛行機、電車)</li>
+<li><code>stay</code> (宿泊: ホテル)</li>
+<li><code>food</code> (食事)</li>
+<li><code>sightseeing</code> (観光)</li>
+</ul>
+</li>
+<li><strong>booking_ref / attachment_url</strong>: チケット管理機能の実体。航空券の予約番号やPDFのURLをここに保持する。</li>
+</ul>
+<h3 id="25-expenses--expense_shares-支出割り勘">2.5 EXPENSES &amp; EXPENSE_SHARES (支出・割り勘)</h3>
+<p>割り勘計算を柔軟にするため、親子関係にする。</p>
+<ul>
+<li><strong>EXPENSES</strong>: 「誰が、いくら払ったか」という事実（レシート情報）。</li>
+<li><strong>EXPENSE_SHARES</strong>: 「その支払いは誰のためのものか」という内訳。</li>
+</ul>
+<blockquote>
+<p><strong>割り勘の例</strong>:
+Aさんが3000円払った（Expensesレコード1つ）。
+対象はA, B, Cの3人（Sharesレコード3つ）。
+➡ これで「BさんはAさんに1000円借金がある」状態を計算できる。</p>
+</blockquote>
+<h3 id="26-media-思い出">2.6 MEDIA (思い出)</h3>
+<ul>
+<li><strong>itinerary_id</strong>: 「この写真は『2日目のランチ』の時のもの」と紐付けるための外部キー（NULL許可）。
+<ul>
+<li>Tripに直接紐付けることで、アルバム機能（Gallery）の実装を容易にする。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="3-設計のポイントアジャイル対応">3. 設計のポイント（アジャイル対応）</h2>
+<h3 id="チケット管理テーブルを作らない理由">チケット管理テーブルを作らない理由</h3>
+<p>初期段階では <code>ITINERARIES</code> テーブルに <code>booking_ref</code>（予約番号）や <code>memo</code> カラムがあれば十分機能します。専用テーブルを作ると結合が複雑になるため、まずは単一テーブルでMVPを目指します。</p>
+<h3 id="通貨currencyカラム">通貨（Currency）カラム</h3>
+<p>海外旅行対応のため、金額だけでなく <code>currency</code> ('JPY', 'USD' etc.) を持たせています。MVPではJPY固定でも良いですが、DB設計には入れておくべきです。</p>
+<h3 id="idはuuidを採用">IDはUUIDを採用</h3>
+<p>連番（Integer）ではなくUUID（v4）を採用することで、推測されにくくし、分散DB（将来的なスケーリング）に対応しやすくしています。</p>
+
+            
+            
+        </body>
+        </html>
