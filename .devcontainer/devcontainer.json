@@ -1,13 +1,10 @@
 {
   "name": "TripLink DevContainer",
   "dockerFile": "Dockerfile",
-  "context": "..",
-  "mounts": [
-    "source=${localWorkspaceFolder}/triplink,target=/triplink,type=bind,consistency=cached"
-  ],
   "remoteUser": "node",
-  "postCreateCommand": "pnpm install && pnpm add -D -w @biomejs/biome@2.3.5 && pnpm add -D -w typescript@5.9.3",
-  
+
+  "postCreateCommand": "cd triplink && pnpm install && pnpm add -D @biomejs/biome@2.3.5 && pnpm add -D typescript@5.9.3",
+
   "customizations": {
     "vscode": {
       "settings": {
@@ -32,6 +29,5 @@
     }
   },
 
-  "forwardPorts": [3000, 8787],
-  "workspaceFolder": "/triplink"
+  "forwardPorts": [3000, 8787]
 }
