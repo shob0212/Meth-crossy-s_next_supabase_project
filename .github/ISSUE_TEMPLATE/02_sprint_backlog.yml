@@ -1,0 +1,64 @@
+name: "🛠 スプリントバックログ（子Issue）"
+description: "スプリント内(1週間)で実施する小さなタスクを登録するためのテンプレート"
+title: "[Task] タスク名を入力"
+labels:
+  - "sprint-backlog"
+
+body:
+  - type: textarea
+    id: task_description
+    attributes:
+      label: "タスク内容（何をやるのか）"
+      placeholder: "例：ログインフォームのUIを作る"
+    validations:
+      required: true
+  
+  - type: checkboxes
+    id: assignees_check
+    attributes:
+      label: このフォームの右側の1番上にあるAssignees(担当者)をクリックして担当者を設定してください。
+      options:
+        - label: 担当者を設定しました
+      validations:
+        required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: "完了条件（Doneと判断できる基準）"
+      placeholder: "- 入力欄が正しく表示される\n- バリデーションが動く\n- UIデザインに沿っている"
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: "作業ステップ（あれば）"
+      placeholder: "- 画面作成\n- バリデーション追加\n- テスト"
+    validations:
+      required: false
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: "メモ"
+      placeholder: "注意点や追加情報があれば記載"
+    validations:
+      required: false
+  
+  - type: dropdown
+    id: author
+    attributes:
+      label: "作成者"
+    description: "この issue を作成するのは誰ですか？"
+    multiple: false
+    options:
+      - "中野"
+      - "伊藤"
+      - "木原"
+      - "桑島"
+      - "高村"
+      - "櫻井"
+    validations:
+    required: true
+

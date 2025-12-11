@@ -1,0 +1,43 @@
+name: "📦 プロダクトバックログ（親Issue）"
+description: "プロダクト全体の大きな機能・改善点を管理するIssueのテンプレート"
+title: "[Feature] 機能を入力"
+labels:
+  - "product-backlog"
+body:
+  - type: input
+    id: feature_name
+    attributes:
+      label: "作る機能名（またはテーマ名）"
+      placeholder: "例：ユーザー管理機能"
+    validations:
+      required: true
+
+  - type: textarea
+    id: overview
+    attributes:
+      label: "概要（何を実現するか？）"
+      placeholder: "例：アプリ内のユーザー登録、ログイン、編集を可能にする。"
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: "スコープ（含まれるもの）"
+      placeholder: "- ログイン\n- 新規登録\n- プロフィール編集"
+    validations:
+      required: false
+
+  - type: textarea
+    id: out_of_scope
+    attributes:
+      label: "対象外（今回含めないもの）"
+      placeholder: "- SNSログイン\n- メール認証"
+    validations:
+      required: false
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: "メモ"
+      placeholder: "その他決まったことや注意点があれば記載"
