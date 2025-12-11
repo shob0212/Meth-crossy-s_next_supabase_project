@@ -4,19 +4,11 @@ title: "[Task] タスク名を入力"
 labels:
   - "sprint-backlog"
 
-body:
-  - type: textarea
-    id: task_description
-    attributes:
-      label: "タスク内容（何をやるのか）"
-      placeholder: "例：ログインフォームのUIを作る"
-    validations:
-      required: true
-  
+body:  
   - type: checkboxes
     id: assignees_check
     attributes:
-      label: このフォームの右側の1番上にあるAssignees(担当者)をクリックして担当者を設定してください。
+      label: このフォームの右側、1番上にあるAssignees(担当者)をクリックして担当者を設定してください。
       options:
         - label: 担当者を設定しました
       validations:
