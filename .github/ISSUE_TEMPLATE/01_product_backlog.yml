@@ -3,15 +3,8 @@ description: "プロダクト全体の大きな機能・改善点を管理する
 title: "[Feature] 機能を入力"
 labels:
   - "product-backlog"
+  
 body:
-  - type: input
-    id: feature_name
-    attributes:
-      label: "作る機能名（またはテーマ名）"
-      placeholder: "例：ユーザー管理機能"
-    validations:
-      required: true
-
   - type: textarea
     id: overview
     attributes:
