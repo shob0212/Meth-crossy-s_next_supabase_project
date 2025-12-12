@@ -51,5 +51,6 @@ body:
       label: "このフォームの左下にあるAssignees(担当者)をクリックして担当者を設定してください。"
       options:
         - label: "担当者を設定しました"
+        - label: "担当者を設定しました（確認用）"
     validations:
       required: true
