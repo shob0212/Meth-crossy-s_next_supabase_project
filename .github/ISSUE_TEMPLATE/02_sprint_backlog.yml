@@ -5,15 +5,6 @@ labels:
   - "sprint-backlog"
 
 body:  
-  - type: checkboxes
-    id: assignees_check
-    attributes:
-      label: このフォームの右側、1番上にあるAssignees(担当者)をクリックして担当者を設定してください。
-      options:
-        - label: 担当者を設定しました
-      validations:
-        required: true
-
   - type: textarea
     id: acceptance
     attributes:
@@ -42,15 +33,23 @@ body:
     id: author
     attributes:
       label: "作成者"
-    description: "この issue を作成するのは誰ですか？"
-    multiple: false
-    options:
-      - "中野"
-      - "伊藤"
-      - "木原"
-      - "桑島"
-      - "高村"
-      - "櫻井"
+      description: "この issue を作成するのは誰ですか？"
+      multiple: false
+      options:
+        - "中野"
+        - "伊藤"
+        - "木原"
+        - "桑島"
+        - "高村"
+        - "櫻井"
     validations:
-    required: true
+      required: true
 
+  - type: checkboxes
+    id: assignees_check
+    attributes:
+      label: このフォームの左下にあるAssignees(担当者)をクリックして担当者を設定してください。
+      options:
+        - label: 担当者を設定しました
+      validations:
+        required: true
