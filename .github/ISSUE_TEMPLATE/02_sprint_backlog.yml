@@ -44,12 +44,3 @@ body:
       multiple: false
     validations:
       required: true
-
-  - type: checkboxes
-    id: assignees_check
-    attributes:
-      label: "このフォームの左下にあるAssignees(担当者)をクリックして担当者を設定してください。"
-      options:
-        - label: "担当者を設定しました"
-    validations:
-      required: true
