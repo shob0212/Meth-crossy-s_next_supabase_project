@@ -6,6 +6,10 @@ title: '[Future Task] 追加したい機能'
 labels:
   - Feature-request
 body:
+  - type: markdown
+    attributes:
+      value: "このフォームにアイデアを書いてください。できれば、背景・目的・想定効果を明記すると後で役立ちます。"
+
   - type: dropdown
     id: author
     attributes:
@@ -21,10 +25,6 @@ body:
       multiple: false
     validations:
       required: true
-
-  - type: markdown
-    attributes:
-      value: "このフォームにアイデアを書いてください。できれば、背景・目的・想定効果を明記すると後で役立ちます。"
 
   - type: input
     id: task_description
