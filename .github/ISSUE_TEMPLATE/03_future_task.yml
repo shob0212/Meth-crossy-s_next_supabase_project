@@ -1,0 +1,52 @@
+name: Future Task / Wish List
+description: >
+  今すぐは開発しないけど、時間があればやりたいことを登録するためのフォームです。
+  チームでアイデア共有や、バックログ整理に使えます。
+title: '[Future Task] 追加したい機能' 
+labels:
+  - Feature-request
+body:
+  - type: dropdown
+    id: author
+    attributes:
+      label: "作成者"
+      description: "この issue を作成するのは誰ですか？"
+      options:
+        - "中野"
+        - "伊藤"
+        - "木原"
+        - "桑島"
+        - "高村"
+        - "櫻井"
+      multiple: false
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: "このフォームにアイデアを書いてください。できれば、背景・目的・想定効果を明記すると後で役立ちます。"
+
+  - type: input
+    id: task_description
+    attributes:
+      label: "タスク内容"
+      description: "やりたいことの具体的な内容を簡潔に書いてください。"
+      placeholder: "例: ユーザー行動ログ分析用のダッシュボードを作りたい"
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: "補足・詳細"
+      description: "必要であれば、背景・目的・参考情報などを入力してください。"
+      placeholder: "例: このタスクは、ユーザー行動を可視化することで改善ポイントを特定するのに役立つ"
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: "優先度"
+      description: "今のところの優先度を選択してください。"
+      options:
+        - 高
+        - 中
+        - 低
+        - 未定
