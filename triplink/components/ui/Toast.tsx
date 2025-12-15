@@ -2,25 +2,25 @@
  * ========================
  * トーストメッセージコンポーネント
  * ========================
- * 
+ *
  * 機能：画面上部に一時的に表示される通知
- * 
+ *
  * 使い方：
  *   <Toast title="成功" message="データを保存しました" onClose={() => {}} />
- * 
+ *
  * 説明：
  *   - 5秒後に自動的に消える
  *   - ユーザーがボタンをクリックしても消せる
  *   - 重要な通知（成功、エラー、情報）を表示するのに使う
  */
 
-import { useEffect } from 'react';
-import { Bell, X } from 'lucide-react';
+import { Bell, X } from "lucide-react";
+import { useEffect } from "react";
 
 interface ToastProps {
-  title: string;      // 通知のタイトル
-  message: string;    // 通知のメッセージ
-  onClose: () => void;  // 閉じる時の処理
+  title: string; // 通知のタイトル
+  message: string; // 通知のメッセージ
+  onClose: () => void; // 閉じる時の処理
 }
 
 export function Toast({ title, message, onClose }: ToastProps) {
@@ -40,12 +40,17 @@ export function Toast({ title, message, onClose }: ToastProps) {
 
         {/* テキスト */}
         <div className="flex-1">
-          <h4 className="font-bold text-gray-800 dark:text-white text-sm">{title}</h4>
-          <p className="text-xs text-gray-500 dark:text-gray-300 mt-1">{message}</p>
+          <h4 className="font-bold text-gray-800 dark:text-white text-sm">
+            {title}
+          </h4>
+          <p className="text-xs text-gray-500 dark:text-gray-300 mt-1">
+            {message}
+          </p>
         </div>
 
         {/* 閉じるボタン */}
         <button
+          type="button"
           onClick={onClose}
           className="text-gray-400 hover:text-gray-600"
         >

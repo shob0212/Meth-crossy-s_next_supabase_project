@@ -2,31 +2,31 @@
  * ========================
  * ユーザーアバターコンポーネント
  * ========================
- * 
+ *
  * 機能：ユーザーのプロフィール写真を表示するコンポーネント
- * 
+ *
  * 使い方：
  *   <UserAvatar user={currentUser} size="md" />
- * 
+ *
  * 説明：
  *   - ユーザーがアバター画像を持っていれば表示
  *   - なければ、名前の最初の2文字を背景色と一緒に表示
  *   - サイズ（sm/md/lg）を指定できる
  */
 
-import { User, TripMember } from '@/lib/types';
+import type { TripMember, User } from "@/lib/types";
 
 interface UserAvatarProps {
   user: User | TripMember;
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
 }
 
-export function UserAvatar({ user, size = 'md' }: UserAvatarProps) {
+export function UserAvatar({ user, size = "md" }: UserAvatarProps) {
   // サイズごとのスタイルを定義
   const sizeClasses = {
-    sm: 'w-6 h-6 text-[10px]',
-    md: 'w-8 h-8 text-xs',
-    lg: 'w-16 h-16 text-xl'
+    sm: "w-6 h-6 text-[10px]",
+    md: "w-8 h-8 text-xs",
+    lg: "w-16 h-16 text-xl",
   };
 
   // もしアバター画像があれば、それを表示

@@ -2,25 +2,25 @@
  * ========================
  * 認証レイアウトコンポーネント
  * ========================
- * 
+ *
  * 機能：ログイン画面や登録画面の背景やレイアウト
- * 
+ *
  * 使い方：
  *   <AuthLayout title="ログイン" onBack={() => {}}>
  *     <input type="email" placeholder="メール" />
  *   </AuthLayout>
- * 
+ *
  * 説明：
  *   - ログイン、登録、認証など、複数の認証画面で使い回す
  *   - タイトルと内容を渡すことで、異なる認証画面を作成できる
  */
 
-import { BackButton } from './BackButton';
+import { BackButton } from "./BackButton";
 
 interface AuthLayoutProps {
-  title: string;                    // ページのタイトル
-  children?: React.ReactNode;       // ページの内容
-  onBack: () => void;               // 戻るボタンを押した時の処理
+  title: string; // ページのタイトル
+  children?: React.ReactNode; // ページの内容
+  onBack: () => void; // 戻るボタンを押した時の処理
 }
 
 export function AuthLayout({ title, children, onBack }: AuthLayoutProps) {
