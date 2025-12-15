@@ -10,6 +10,7 @@
     "format": "biome format --write"
   },
   "dependencies": {
+    "lucide-react": "^0.561.0",
     "next": "16.0.10",
     "react": "19.2.0",
     "react-dom": "19.2.0"
@@ -20,6 +21,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "autoprefixer": "^10.4.23",
     "tailwindcss": "^4",
     "typescript": "^5.9.3"
   }

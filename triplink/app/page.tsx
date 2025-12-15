@@ -1,65 +1,86 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { useState } from 'react';
+import { Compass, LogIn, UserPlus } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { TEXT } from '@/lib/constants';
+
+export default function WelcomePage() {
+  const router = useRouter();
+  const t = TEXT['ja'];
+  const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
+  const [joinInput, setJoinInput] = useState('');
+
+  const handleJoinTrip = () => {
+    if (joinInput) {
+      router.push(`/trips/${joinInput}`);
+    }
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen bg-mint-400 dark:bg-gray-900 flex items-center justify-center p-6 relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+        <div className="absolute top-20 left-10 w-64 h-64 bg-white rounded-full mix-blend-overlay filter blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-peach-300 rounded-full mix-blend-overlay filter blur-3xl animate-pulse delay-1000"></div>
+      </div>
+      
+      <div className="z-10 w-full max-w-md flex flex-col items-center text-center animate-fade-in">
+        <div className="w-24 h-24 bg-white rounded-[32px] mb-8 flex items-center justify-center shadow-xl rotate-3 transform hover:rotate-6 transition-transform">
+          <Compass size={48} className="text-mint-400" />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        <h1 className="text-4xl font-bold text-white mb-4 tracking-tight">TripLink</h1>
+        <p className="text-mint-50 text-lg mb-12 font-light">{t.desc}</p>
+        
+        <div className="w-full max-w-xs space-y-4">
+          <button 
+            onClick={() => router.push('/login')}
+            className="w-full bg-white text-mint-500 py-4 rounded-full font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+            <LogIn size={20} /> {t.login}
+          </button>
+          <button 
+            onClick={() => router.push('/register')}
+            className="w-full bg-mint-500 text-white py-4 rounded-full font-bold border border-mint-300 shadow-lg hover:bg-mint-600 transition-all flex items-center justify-center gap-2"
+          >
+            <UserPlus size={20} /> {t.register}
+          </button>
+          <div className="h-px bg-mint-300 w-full my-4"></div>
+          <button 
+            onClick={() => router.push('/dashboard')}
+            className="w-full bg-transparent text-white py-4 rounded-full font-bold border-2 border-white/30 hover:bg-white/10 transition-colors"
+          >
+            {t.guest}
+          </button>
+        </div>
+      </div>
+
+      {isJoinModalOpen && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-6">
+          <div className="bg-white dark:bg-gray-800 w-full max-w-sm rounded-[32px] p-8 shadow-2xl">
+            <h3 className="font-bold text-xl mb-4 text-gray-800 dark:text-white">共有リンクを開く</h3>
+            <input 
+              value={joinInput} 
+              onChange={e => setJoinInput(e.target.value)} 
+              placeholder="Trip ID (e.g. t1)" 
+              className="w-full bg-gray-100 dark:bg-gray-700 dark:text-white p-4 rounded-2xl mb-4 outline-none" 
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <div className="flex gap-4">
+              <button 
+                onClick={() => setIsJoinModalOpen(false)} 
+                className="flex-1 py-3 rounded-full text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                {t.cancel}
+              </button>
+              <button 
+                onClick={handleJoinTrip} 
+                className="flex-1 py-3 rounded-full bg-mint-400 text-white font-bold shadow-sm"
+              >
+                {t.join}
+              </button>
+            </div>
+          </div>
         </div>
-      </main>
+      )}
     </div>
   );
 }
