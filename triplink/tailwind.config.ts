@@ -66,6 +66,9 @@ const config: Config = {
       transitionDelay: {
         "1000": "1000ms",
       },
+      animationDelay: {
+        "1000": "1000ms",
+      },
     },
   },
   plugins: [],

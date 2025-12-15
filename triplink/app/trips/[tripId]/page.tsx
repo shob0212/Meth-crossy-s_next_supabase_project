@@ -41,9 +41,40 @@ import { Timeline } from "@/components/features/Timeline";
 import { Wallet } from "@/components/features/Wallet";
 import { UserAvatar } from "@/components/ui/UserAvatar";
 import { MOCK_TRIPS, MOCK_USERS } from "@/lib/constants";
-import { ItineraryEvent, type Language, type Trip } from "@/lib/types";
+import type { Language, Trip } from "@/lib/types";
 
 type TabType = "TIMELINE" | "CALENDAR" | "WALLET" | "BOOKINGS" | "MEMORIES";
+
+/**
+ * 特定の旅行を閲覧・管理するための旅行詳細ページコンポーネント。
+ *
+ * このコンポーネントは、複数のタブに分かれた旅行情報を表示します：
+ * - TIMELINE：旅行中の出来事や行程
+ * - CALENDAR：旅行日程のカレンダー表示
+ * - WALLET：支出管理および割り勘計算
+ * - BOOKINGS：ホテル、フライトなどの予約情報
+ * - MEMORIES：写真ギャラリーや共有された思い出
+ *
+ * @component
+ * @returns {React.ReactElement}
+ *  固定ヘッダーによるナビゲーション、
+ *  タブ切り替え式のコンテンツ表示、
+ *  メンバー管理モーダル、
+ *  戻るボタンを備えた旅行詳細ページ全体。
+ *
+ * @example
+ * // Next.js の動的ルーティングで使用
+ * // app/trips/[tripId]/page.tsx
+ * export default function TripDetailPage() { ... }
+ *
+ * @remarks
+ * - URL パラメータ `tripId` をもとに MOCK_TRIPS から旅行データを取得
+ * - タブ切り替えやモーダルの表示状態はローカル state で管理
+ * - Tailwind CSS によりダークモードに対応
+ * - データの更新処理はすべて `updateTripData` ユーティリティ関数経由で実施
+ * - モーダル表示には `&&` 演算子による条件付きレンダリングを使用
+ * - 固定ヘッダー、下部アクションボタン、スクロール可能なコンテンツを備えたレスポンシブレイアウト
+ */
 
 export default function TripDetailPage() {
 	// ============= 状態管理 =============
@@ -57,7 +88,6 @@ export default function TripDetailPage() {
 	const [language] = useState<Language>("ja");
 	const [tripData, setTripData] = useState<Trip | null>(trip || null);
 	const [isMemberModalOpen, setIsMemberModalOpen] = useState(false);
-	const [isEditing, setIsEditing] = useState(false);
 
 	// ============= ハンドラ関数 =============
 
@@ -91,17 +121,20 @@ export default function TripDetailPage() {
 			<div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md sticky top-0 z-30 border-b border-gray-100 dark:border-gray-700">
 				<div className="px-6 py-4 flex justify-between items-center">
 					<div className="flex items-center gap-4 flex-1">
+						{/* 旅行タイトル */}
 						<h1 className="text-xl font-bold text-gray-800 dark:text-white line-clamp-1">
 							{tripData.title}
 						</h1>
 					</div>
 					<div className="flex gap-3">
+						{/* 共有ボタン */}
 						<button
 							type="button"
 							className="w-10 h-10 rounded-full bg-gray-50 dark:bg-gray-700 flex items-center justify-center text-gray-400 hover:text-mint-500 transition-colors"
 						>
 							<Share2 size={20} />
 						</button>
+						{/* メンバーモーダルを開くボタン */}
 						<button
 							type="button"
 							onClick={() => setIsMemberModalOpen(true)}
@@ -144,153 +177,184 @@ export default function TripDetailPage() {
 				</div>
 			</div>
 
-			{/* コンテンツ */}
+			{/* コンテンツエリア */}
 			<div className="p-6 animate-fade-in">
+				{/* タイムラインコンポーネント */}
 				{activeTab === "TIMELINE" && (
-					<Timeline
-						events={tripData.events}
-						onAddEvent={(e) =>
-							updateTripData((t) => ({
-								...t,
-								events: [...t.events, { ...e, id: Math.random().toString() }],
-							}))
-						}
-						onUpdateEvent={(e) =>
-							updateTripData((t) => ({
-								...t,
-								events: t.events.map((ev) => (ev.id === e.id ? e : ev)),
-							}))
-						}
-						onDeleteEvent={(id) =>
-							updateTripData((t) => ({
-								...t,
-								events: t.events.filter((e) => e.id !== id),
-							}))
-						}
-						tripLocation={tripData.title}
-						tripDates={tripData.dates}
-						language={language}
-					/>
+					<>
+						{/* Timeline コンポーネントに旅行データと更新ハンドラを渡す */}
+						<Timeline
+							events={tripData.events}
+							onAddEvent={(e) =>
+								updateTripData((t) => ({
+									...t,
+									events: [...t.events, { ...e, id: Math.random().toString() }],
+								}))
+							}
+							onUpdateEvent={(e) =>
+								updateTripData((t) => ({
+									...t,
+									events: t.events.map((ev) => (ev.id === e.id ? e : ev)),
+								}))
+							}
+							onDeleteEvent={(id) =>
+								updateTripData((t) => ({
+									...t,
+									events: t.events.filter((e) => e.id !== id),
+								}))
+							}
+							tripLocation={tripData.title}
+							tripDates={tripData.dates}
+							language={language}
+						/>
+					</>
 				)}
 
+				{/* カレンダーコンポーネント */}
 				{activeTab === "CALENDAR" && (
 					<CalendarView trip={tripData} language={language} />
 				)}
 
+				{/* ウォレットコンポーネント */}
 				{activeTab === "WALLET" && (
-					<Wallet
-						expenses={tripData.expenses}
-						members={tripData.members}
-						onAddExpense={(ex) =>
-							updateTripData((t) => ({
-								...t,
-								expenses: [
-									...t.expenses,
-									{ id: Math.random().toString(), ...ex },
-								],
-							}))
-						}
-						onUpdateExpense={(ex) =>
-							updateTripData((t) => ({
-								...t,
-								expenses: t.expenses.map((e) => (e.id === ex.id ? ex : e)),
-							}))
-						}
-						onDeleteExpense={(id) =>
-							updateTripData((t) => ({
-								...t,
-								expenses: t.expenses.filter((e) => e.id !== id),
-							}))
-						}
-						language={language}
-					/>
+					<>
+						{/* Wallet コンポーネントに旅行データと更新ハンドラを渡す */}
+						<Wallet
+							expenses={tripData.expenses}
+							members={tripData.members}
+							onAddExpense={(ex) =>
+								updateTripData((t) => ({
+									...t,
+									expenses: [
+										...t.expenses,
+										{ id: Math.random().toString(), ...ex },
+									],
+								}))
+							}
+							onUpdateExpense={(ex) =>
+								updateTripData((t) => ({
+									...t,
+									expenses: t.expenses.map((e) => (e.id === ex.id ? ex : e)),
+								}))
+							}
+							onDeleteExpense={(id) =>
+								updateTripData((t) => ({
+									...t,
+									expenses: t.expenses.filter((e) => e.id !== id),
+								}))
+							}
+							language={language}
+						/>
+					</>
 				)}
 
+				{/* 予約コンポーネント */}
 				{activeTab === "BOOKINGS" && (
-					<Bookings
-						bookings={tripData.bookings}
-						onAddBooking={(b) =>
-							updateTripData((t) => ({
-								...t,
-								bookings: [
-									...t.bookings,
-									{ id: Math.random().toString(), ...b },
-								],
-							}))
-						}
-						onDeleteBooking={(id) =>
-							updateTripData((t) => ({
-								...t,
-								bookings: t.bookings.filter((b) => b.id !== id),
-							}))
-						}
-						isReadOnly={false}
-						language={language}
-					/>
+					<>
+						{/* Bookings コンポーネントに旅行データと更新ハンドラを渡す */}
+						<Bookings
+							bookings={tripData.bookings}
+							onAddBooking={(b) =>
+								updateTripData((t) => ({
+									...t,
+									bookings: [
+										...t.bookings,
+										{ id: Math.random().toString(), ...b },
+									],
+								}))
+							}
+							onDeleteBooking={(id) =>
+								updateTripData((t) => ({
+									...t,
+									bookings: t.bookings.filter((b) => b.id !== id),
+								}))
+							}
+							isReadOnly={false}
+							language={language}
+						/>
+					</>
 				)}
 
+				{/* 思い出コンポーネント */}
 				{activeTab === "MEMORIES" && (
-					<Memories
-						memories={tripData.memories}
-						members={tripData.members}
-						onAddMemory={(m) =>
-							updateTripData((t) => ({
-								...t,
-								memories: [
-									...t.memories,
-									{ id: Math.random().toString(), ...m },
-								],
-							}))
-						}
-						onDeleteMemory={(id) =>
-							updateTripData((t) => ({
-								...t,
-								memories: t.memories.filter((m) => m.id !== id),
-							}))
-						}
-						currentUser={MOCK_USERS[0]}
-						isReadOnly={false}
-						language={language}
-					/>
+					<>
+						{/* Memories コンポーネントに旅行データと更新ハンドラを渡す */}
+						<Memories
+							memories={tripData.memories}
+							members={tripData.members}
+							onAddMemory={(m) =>
+								updateTripData((t) => ({
+									...t,
+									memories: [
+										...t.memories,
+										{ id: Math.random().toString(), ...m },
+									],
+								}))
+							}
+							onDeleteMemory={(id) =>
+								updateTripData((t) => ({
+									...t,
+									memories: t.memories.filter((m) => m.id !== id),
+								}))
+							}
+							currentUser={MOCK_USERS[0]}
+							isReadOnly={false}
+							language={language}
+						/>
+					</>
 				)}
 			</div>
 
-			{/* メンバーモーダル */}
+			{/* ===== メンバーモーダル（メンバーボタンをクリックで表示） ===== */}
+			{/*
+			 * && 演算子：isMemberModalOpen が true のときだけこのモーダルを表示
+			 * {state変数} && <JSX> は、条件付きレンダリングの常套句
+			 */}
 			{isMemberModalOpen && (
-				<div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] flex items-center justify-center p-6">
-					<div className="bg-white dark:bg-gray-800 w-full max-w-sm rounded-[32px] p-6 shadow-2xl">
-						<div className="flex justify-between items-center mb-6">
-							<h3 className="font-bold text-xl text-gray-800 dark:text-white">
-								Members
-							</h3>
-							<button
-								type="button"
-								onClick={() => setIsMemberModalOpen(false)}
-								className="text-gray-400 hover:text-gray-600"
-							>
-								<X size={20} />
-							</button>
-						</div>
+				<>
+					{/* モーダルの背景（黒い半透明） */}
+					<div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] flex items-center justify-center p-6">
+						{/* モーダルの白いボックス */}
+						<div className="bg-white dark:bg-gray-800 w-full max-w-sm rounded-[32px] p-6 shadow-2xl">
+							{/* ヘッダー：タイトルと閉じるボタン */}
+							<div className="flex justify-between items-center mb-6">
+								<h3 className="font-bold text-xl text-gray-800 dark:text-white">
+									Members
+								</h3>
+								<button
+									type="button"
+									onClick={() => setIsMemberModalOpen(false)}
+									className="text-gray-400 hover:text-gray-600"
+								>
+									<X size={20} />
+								</button>
+							</div>
 
-						<div className="space-y-4">
-							{tripData.members.map((m) => (
-								<div key={m.id} className="flex items-center justify-between">
-									<div className="flex items-center gap-3">
-										<UserAvatar user={m} />
-										<div>
-											<p className="font-bold text-sm text-gray-800 dark:text-white">
-												{m.name}
-											</p>
-											<p className="text-xs text-gray-400 capitalize">
-												{m.role}
-											</p>
+							{/* メンバーリスト */}
+							<div className="space-y-4">
+								{/* 各メンバーを表示 */}
+								{tripData.members.map((m) => (
+									<div key={m.id} className="flex items-center justify-between">
+										{/* ユーザーのアバターを表示 */}
+										<div className="flex items-center gap-3">
+											<UserAvatar user={m} />
+											<div>
+												{/* メンバーの名前を表示 */}
+												<p className="font-bold text-sm text-gray-800 dark:text-white">
+													{m.name}
+												</p>
+												{/* メンバーの役割を表示 */}
+												<p className="text-xs text-gray-400 capitalize">
+													{m.role}
+												</p>
+											</div>
 										</div>
 									</div>
-								</div>
-							))}
+								))}
+							</div>
 						</div>
 					</div>
-				</div>
+				</>
 			)}
 
 			{/* 戻るボタン */}
