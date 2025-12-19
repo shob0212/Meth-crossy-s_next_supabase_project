@@ -39,7 +39,7 @@ export default function RegisterPage() {
 		<div className="min-h-screen bg-ivory dark:bg-gray-900 flex items-center justify-center p-6 relative">
 			<div className="w-full max-w-md animate-fade-in relative z-10">
 				<div className="bg-white dark:bg-gray-800 p-8 rounded-[40px] shadow-xl border border-gray-100 dark:border-gray-700 relative overflow-hidden">
-					<div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-mint-300 to-peach-300"></div>
+					<div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-300 to-peach-300"></div>
 
 					{step === "EMAIL" && (
 						<>
@@ -52,26 +52,26 @@ export default function RegisterPage() {
 									placeholder={t.email}
 									value={email}
 									onChange={(e) => setEmail(e.target.value)}
-									className="w-full bg-gray-50 dark:bg-gray-700 dark:text-white p-4 rounded-2xl outline-none focus:ring-2 ring-mint-200"
+									className="w-full bg-gray-50 dark:bg-gray-700 dark:text-white p-4 rounded-2xl outline-none focus:ring-2 ring-red-200"
 								/>
 								<input
 									type="password"
 									placeholder={t.pass}
 									value={password}
 									onChange={(e) => setPassword(e.target.value)}
-									className="w-full bg-gray-50 dark:bg-gray-700 dark:text-white p-4 rounded-2xl outline-none focus:ring-2 ring-mint-200"
+									className="w-full bg-gray-50 dark:bg-gray-700 dark:text-white p-4 rounded-2xl outline-none focus:ring-2 ring-red-200"
 								/>
 								<input
 									type="password"
 									placeholder={t.confirmPass}
 									value={confirmPassword}
 									onChange={(e) => setConfirmPassword(e.target.value)}
-									className="w-full bg-gray-50 dark:bg-gray-700 dark:text-white p-4 rounded-2xl outline-none focus:ring-2 ring-mint-200"
+									className="w-full bg-gray-50 dark:bg-gray-700 dark:text-white p-4 rounded-2xl outline-none focus:ring-2 ring-red-200"
 								/>
 								<button
 									type="button"
 									onClick={handleRegister}
-									className="w-full bg-mint-400 text-white py-4 rounded-full font-bold shadow-md hover:bg-mint-500 transition-all"
+									className="w-full bg-red-400 text-white py-4 rounded-full font-bold shadow-md hover:bg-red-500 transition-all"
 								>
 									{t.start}
 								</button>
@@ -94,12 +94,12 @@ export default function RegisterPage() {
 									placeholder="000000"
 									value={otp}
 									onChange={(e) => setOtp(e.target.value)}
-									className="w-full text-center text-3xl tracking-[0.5em] font-mono bg-gray-50 dark:bg-gray-700 dark:text-white p-4 rounded-2xl outline-none focus:ring-2 ring-mint-200"
+									className="w-full text-center text-3xl tracking-[0.5em] font-mono bg-gray-50 dark:bg-gray-700 dark:text-white p-4 rounded-2xl outline-none focus:ring-2 ring-red-200"
 								/>
 								<button
 									type="button"
 									onClick={handleVerifyOtp}
-									className="w-full bg-mint-400 text-white py-4 rounded-full font-bold shadow-md hover:bg-mint-500 transition-all"
+									className="w-full bg-red-400 text-white py-4 rounded-full font-bold shadow-md hover:bg-red-500 transition-all"
 								>
 									{t.verify}
 								</button>
@@ -121,12 +121,12 @@ export default function RegisterPage() {
 									placeholder={t.name}
 									value={displayName}
 									onChange={(e) => setDisplayName(e.target.value)}
-									className="w-full bg-gray-50 dark:bg-gray-700 dark:text-white p-4 rounded-2xl outline-none focus:ring-2 ring-mint-200"
+									className="w-full bg-gray-50 dark:bg-gray-700 dark:text-white p-4 rounded-2xl outline-none focus:ring-2 ring-red-200"
 								/>
 								<button
 									type="button"
 									onClick={handleCompleteSetup}
-									className="w-full bg-mint-400 text-white py-4 rounded-full font-bold shadow-md hover:bg-mint-500 transition-all"
+									className="w-full bg-red-400 text-white py-4 rounded-full font-bold shadow-md hover:bg-red-500 transition-all"
 								>
 									{t.start}
 								</button>
